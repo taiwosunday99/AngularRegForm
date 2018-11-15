@@ -82,7 +82,7 @@ function SuccessController($scope) {
                 let myData = snapshot.val();
                     
                 angular.forEach(myData, function (value, index) {
-                    console.log(value);
+                  
                     
                     $scope.user.push({
                         "date": value.date,
@@ -119,6 +119,30 @@ function SuccessController($scope) {
             console.log("failed to sign out");
         });
 
+    }
+
+
+
+    $scope.deleteBtn = function(user) {
+
+        console.log("delete button clicked");
+        // var recentUser = $scope.user.email;
+
+        var user = firebase.auth().currentUser;
+        // if(recentUser == user) {
+
+               user.delete().then(function () {
+                   // User deleted.
+                   $scope.message = "This user has being deleted " + $scope.user;
+                   console.log("this user has being deleted " + $scope.user);
+               }).catch(function (error) {
+                   // An error happened.
+                   $scope.message = error.message;
+                   console.log("failed to delete " + $scope.user);
+               });
+
+        // }
+     
     }
 
 
