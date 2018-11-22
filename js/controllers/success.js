@@ -11,10 +11,6 @@ function SuccessController($scope) {
 
     console.log("this is success controller");
 
-    // $scope.message = $scope.user.email;
-
-
-
     $scope.savePassword = function () {
 
         console.log("password reset email page!");
@@ -69,34 +65,34 @@ function SuccessController($scope) {
 
     function successPage() {
 
-                 
-       
 
         //Populating users from database to success page
 
         dataRef.once('value', function (snapshot) {
-                        
+
             if (snapshot.exists()) {
                 $scope.user = [];
                 console.log("users in database");
                 let myData = snapshot.val();
+                
+                angular.forEach(myData, function (value, userId) {
+
                     
-                angular.forEach(myData, function (value, index) {
-                  
-                    
+                    //    console.log(userId);
+
                     $scope.user.push({
                         "date": value.date,
                         "email": value.email,
                         "firstname": value.firstname,
                         "lastname": value.lastname
                     })
-                
+
                     $scope.$apply();
 
                 });
 
 
-           }
+            }
 
         })
 
@@ -123,27 +119,109 @@ function SuccessController($scope) {
 
 
 
-    $scope.deleteBtn = function(user) {
+    $scope.deleteUser = function (list) {
 
         console.log("delete button clicked");
-        // var recentUser = $scope.user.email;
 
-        var user = firebase.auth().currentUser;
-        // if(recentUser == user) {
+       $scope.itemToDelete = list;
 
-               user.delete().then(function () {
-                   // User deleted.
-                   $scope.message = "This user has being deleted " + $scope.user;
-                   console.log("this user has being deleted " + $scope.user);
-               }).catch(function (error) {
-                   // An error happened.
-                   $scope.message = error.message;
-                   console.log("failed to delete " + $scope.user);
-               });
+        // dataRef = database.ref("users").push();
 
-        // }
-     
+        // var user = firebase.auth().currentUser;
+
+
+        //        user.delete().then(function () {
+        //            // User deleted.
+        //            $scope.message = "This user has being deleted " + $scope.user;
+        //            console.log("this user has being deleted " + $scope.user);
+        //        }).catch(function (error) {
+        //            // An error happened.
+        //            $scope.message = error.message;
+        //            console.log("failed to delete " + $scope.user);
+        //        })
+
+
+        // console.log(list);
+
+
+        // document.getElementById('myModal').close();
+
+
     }
+
+        $scope.remove = function () {
+
+            let myUsers = dataRef.key;
+        
+            console.log($scope.itemToDelete);
+          
+            var index = $scope.user.indexOf($scope.itemToDelete);
+            $scope.user.splice(index, 1);
+
+            
+            console.log(myUsers);
+
+            // console.log("Deleted item is at position ",index);
+        }
+
+
+        
+
+        //Search Date function
+        $scope.searchDate = function (){
+
+            console.log("clicked for search date");
+            
+
+            let startDate = $scope.startDate;
+            let endDate = $scope.endDate;
+
+            let startDateInMill = startDate.getTime();
+            let endDateInMill = endDate.getTime();
+
+            console.log("Start Date: " + startDateInMill);
+             console.log("End Date: " + endDateInMill);
+
+             let newStartDate = startDateInMill;
+             let newEndDate = endDateInMill;
+
+             dataRef = database.ref("users");
+             
+             dataRef.orderByChild("date").startAt(newStartDate).endAt(newEndDate)
+             .on("value", function(snapshot) {
+                 
+                let mySearchDate = snapshot.val();
+                populateSearchDate(mySearchDate);
+                
+                
+                console.log(mySearchDate);
+             })
+              
+
+
+        }
+
+
+        //Populate Search Date
+        function populateSearchDate(){
+            $scope.user = [];
+                   
+            console.log("populate search date");
+            
+            dataRef.on('value', function(snapshot) {
+                
+                let myValue = snapshot.val();
+                 
+            angular.forEach(myValue, function(value, index) {
+                
+                // $scope.user.push(value);
+                console.log(value);
+                
+            })
+          
+            });
+
+        }
 
 
 

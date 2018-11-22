@@ -46,6 +46,15 @@
     };
     firebase.initializeApp(config);
 </script>
+<script src="node_modules/parse/dist/parse.min.js"></script>
+
+<script>
+    Parse.serverURL = 'https://parseapi.back4app.com'; // This is your Server URL
+    Parse.initialize(
+        'Q6kQma37H7Lb6Xtme3wTrSccV4uBJ5UCSMohz5KG', // This is your Application ID
+        '8zXKcmQHz74vXVGVcAkITcIt96TzXzTm8Vz040wm' // This is your Javascript key
+    );
+</script>
     <script src="/js/app.js"></script>
     <!-- <script src="/js/services/authentication.Serv.js"></script> -->
     <script src="/js/controllers/registration.js"></script>
